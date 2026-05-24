@@ -1,4 +1,4 @@
-import { Bell, PawPrint } from "lucide-react";
+import { Bell, Newspaper, PawPrint } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { Button } from "~/components/ui/button";
@@ -22,7 +22,7 @@ export function Header({ className }: { className?: string }) {
       className={[
         "h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none px-20 py-4 bg-primary/85 text-primary-foreground",
         !isHome && y > 50 ? "shadow-md" : "",
-        className
+        className,
       ]
         .filter(Boolean)
         .join(" ")}
@@ -38,6 +38,14 @@ export function Header({ className }: { className?: string }) {
             <li>
               <Button variant="ghost" asChild>
                 <Link to="/pets">Find your buddy</Link>
+              </Button>
+            </li>
+            <li>
+              <Button variant="ghost" asChild>
+                <Link to="/news">
+                  <Newspaper className="h-4 w-4 mr-1" />
+                  News
+                </Link>
               </Button>
             </li>
             <li>
