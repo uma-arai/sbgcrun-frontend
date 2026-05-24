@@ -1,0 +1,21 @@
+.env
+!.env.example
+.DS_Store
+.react-router
+build
+*.tsbuildinfo
+*.log
+*.log.*
+
+# npm package files
+.npmrc
+node_modules
+
+# IDEs
+.idea
+
+# AI
+.claude
+CLAUDE.md
+.serena
+data/
