@@ -9,6 +9,7 @@ export default [
   index("routes/home.tsx"),
   route("healthcheck", "routes/healthcheck.tsx"),
   route("about", "routes/about.tsx"),
+  route("news", "routes/news.tsx"),
   route("notifications", "routes/notifications.tsx"),
 
   // ペット関連
