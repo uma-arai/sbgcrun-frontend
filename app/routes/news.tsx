@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { ja } from "date-fns/locale";
 import {
+  AlertTriangle,
   Calendar,
   Megaphone,
   Newspaper,
@@ -10,6 +11,7 @@ import {
   User,
 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { config } from "~/lib/config";
 import { backendFetchWithRetry } from "~/lib/http.server";
@@ -63,13 +65,21 @@ export async function loader() {
       const data: NewsResponse = await response.json();
       const news = convertServerNewsToClient(data.data);
       news.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-      return { news, total: news.length };
+      return { news, total: news.length, error: null as string | null };
     }
     console.warn(`API Error: ${response.status} ${response.statusText}`);
-    return { news: [], total: 0 };
+    return {
+      news: [],
+      total: 0,
+      error: `取得に失敗しました`,
+    };
   } catch (error) {
     console.warn("Failed to fetch news from server:", error);
-    return { news: [], total: 0 };
+    return {
+      news: [],
+      total: 0,
+      error: "データの取得に失敗しました",
+    };
   }
 }
 
@@ -161,6 +171,8 @@ function NewsItem({ news }: { news: News }) {
 export default function NewsPage({ loaderData }: Route.ComponentProps) {
   const news = loaderData?.news ?? [];
   const total = loaderData?.total ?? 0;
+  const error = loaderData?.error ?? null;
+  const hasError = error !== null;
   const hasNews = news.length > 0;
 
   return (
@@ -171,16 +183,39 @@ export default function NewsPage({ loaderData }: Route.ComponentProps) {
           <div>
             <h1 className="text-3xl font-bold text-foreground">お知らせ</h1>
             <p className="text-muted-foreground mt-1">
-              {hasNews
-                ? `${total}件のお知らせがあります`
-                : "現在お知らせはありません"}
+              {hasError
+                ? "お知らせの読み込みに失敗しました"
+                : hasNews
+                  ? `${total}件のお知らせがあります`
+                  : "現在お知らせはありません"}
             </p>
           </div>
         </div>
       </div>
 
       <div className="space-y-4">
-        {!hasNews ? (
+        {hasError ? (
+          <Card className="border-destructive/40 bg-destructive/5">
+            <CardContent className="p-8 text-center">
+              <AlertTriangle className="h-16 w-16 mx-auto mb-4 text-destructive" />
+              <h2 className="text-xl font-semibold text-destructive mb-2">
+                お知らせの取得に失敗しました
+              </h2>
+              <p className="text-foreground/90 mb-2">{error}</p>
+              <p className="text-sm text-muted-foreground mb-6">
+                時間をおいて再度お試しください。問題が続く場合はサービス提供者にお問い合わせください。
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                再読み込み
+              </Button>
+            </CardContent>
+          </Card>
+        ) : !hasNews ? (
           <Card className="text-center py-12">
             <CardContent>
               <Newspaper className="h-16 w-16 mx-auto mb-4 text-muted-foreground/40" />
