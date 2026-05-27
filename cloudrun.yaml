@@ -8,22 +8,22 @@ metadata:
     run.googleapis.com/maxScale: "2"
     run.googleapis.com/ingress: internal-and-cloud-load-balancing
     # 6-1でコメントを外す。デフォルトURLを無効化する
-    run.googleapis.com/default-url-disabled: "true"
-#    run.googleapis.com/binary-authorization: default
+    # run.googleapis.com/default-url-disabled: "true"
+    # 6-9でコメントを外す。BinaryAuthの有効化
+    # run.googleapis.com/binary-authorization: default
 spec:
   template:
     metadata:
       annotations:
         autoscaling.knative.dev/maxScale: '2'
         run.googleapis.com/execution-environment: gen2
-        # TODO: 配布時はPROJECT_IDをプレースホルダーにする
-        run.googleapis.com/network-interfaces: '[{"network":"sbgcrun-app", "subnetwork":"sbgcrun-app"}]'
-        run.googleapis.com/vpc-access-egress: all-traffic
+        # 5-4でコメントを外す。VPCネットワークの設定
+        # run.googleapis.com/network-interfaces: '[{"network":"sbgcrun-app", "subnetwork":"sbgcrun-app"}]'
+        # run.googleapis.com/vpc-access-egress: all-traffic
     spec:
       containerConcurrency: 10
       timeoutSeconds: 300
-      # TODO: 配布時はPROJECT_IDをプレースホルダーにする
-      serviceAccountName: sbgcrun-app-frontend@core-port-495407-g3.iam.gserviceaccount.com
+      serviceAccountName: sbgcrun-app-frontend@PROJECT_ID.iam.gserviceaccount.com
       containers:
       - image: frontend
         env:
