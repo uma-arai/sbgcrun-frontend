@@ -2,7 +2,7 @@ options:
   logging: CLOUD_LOGGING_ONLY
   env:
     - "DEPLOY_ENV=$_DEPLOY_ENV"
-    - "SKAFFOLD_DEFAULT_REPO=asia-east1-docker.pkg.dev/$PROJECT_ID/sbgcrun-app"
+    - "SKAFFOLD_DEFAULT_REPO=asia-northeast1-docker.pkg.dev/$PROJECT_ID/sbgcrun-app"
 
 steps:
   - name: "gcr.io/k8s-skaffold/skaffold:v2.10.1"
@@ -54,6 +54,6 @@ steps:
         --skaffold-file=skaffold.yaml
 substitutions:
   _PIPELINE_NAME: sbgcrun-frontend
-  _REGION: asia-east1
+  _REGION: asia-northeast1
 
 timeout: 1200s
