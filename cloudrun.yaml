@@ -3,10 +3,12 @@ kind: Service
 metadata:
   name: sbgcrun-frontend
   annotations:
-    #   run.googleapis.com/ingress: all
+    # 5-3でコメントアウト予定
+    run.googleapis.com/ingress: all
     run.googleapis.com/invoker-iam-disabled: "true"
     run.googleapis.com/maxScale: "2"
-    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+    # 5-3でコメントを外す。外部からはロードバランサ経由のみを許可する
+    # run.googleapis.com/ingress: internal-and-cloud-load-balancing
     # 6-1でコメントを外す。デフォルトURLを無効化する
     # run.googleapis.com/default-url-disabled: "true"
     # 6-9でコメントを外す。BinaryAuthの有効化
