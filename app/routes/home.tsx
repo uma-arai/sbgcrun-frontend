@@ -1,5 +1,5 @@
 import { ArrowRight, Heart, PawPrint, Shield, Star, Users } from "lucide-react";
-import { Link } from "react-router";
+import { Link, data } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -30,11 +30,18 @@ export async function loader() {
       const json = (await res.json()) as { data: { message: string } };
       return { message: json.data.message };
     }
+    console.warn(`API Error: ${res.status} ${res.statusText}`);
+    return data(
+      { message: "Hello, API response cannot be used" },
+      { status: res.status },
+    );
   } catch (error) {
     console.error("Error fetching data from backend:", error);
+    return data(
+      { message: "Hello, API response cannot be used" },
+      { status: 503 },
+    );
   }
-
-  return { message: "Hello, API response cannot be used" };
 }
 
 function HeroSection({ message }: { message: string }) {

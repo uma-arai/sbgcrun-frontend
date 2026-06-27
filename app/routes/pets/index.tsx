@@ -18,7 +18,8 @@ export async function loader() {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch pets");
+      console.warn(`API Error: ${response.status} ${response.statusText}`);
+      throw new Response("Failed to fetch pets", { status: response.status });
     }
 
     const data = await response.json();
@@ -41,7 +42,11 @@ export async function loader() {
     return { pets: sortedPets };
   } catch (error) {
     console.error("Error fetching /v1/pets:", error);
-    throw error;
+    // バックエンドのステータスを透過するため Response はそのまま再 throw する
+    if (error instanceof Response) {
+      throw error;
+    }
+    throw new Response("Failed to fetch pets", { status: 503 });
   }
 }
 

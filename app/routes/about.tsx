@@ -1,3 +1,4 @@
+import { data } from "react-router";
 import { config } from "~/lib/config";
 import { backendFetchWithRetry } from "~/lib/http.server";
 import type { Route } from "./+types/home";
@@ -21,13 +22,12 @@ export async function loader() {
       const json = (await res.json()) as { data: { message: string } };
       return { message: json.data.message };
     }
+    console.warn(`API Error: ${res.status} ${res.statusText}`);
+    return data({ message: "about info is not found" }, { status: res.status });
   } catch (error) {
     console.error("some error occurred", error);
+    return data({ message: "about info is not found" }, { status: 503 });
   }
-
-  return {
-    message: "about info is not found",
-  };
 }
 
 export default function About({ loaderData }: Route.ComponentProps) {

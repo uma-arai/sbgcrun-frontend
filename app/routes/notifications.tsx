@@ -2,7 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ja } from "date-fns/locale";
 import { AlertTriangle, Bell, CheckCircle, Info, XCircle } from "lucide-react";
 import { useEffect } from "react";
-import { useFetcher } from "react-router";
+import { data, useFetcher } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -69,21 +69,21 @@ export async function loader() {
     );
 
     if (response.ok) {
-      const data: NotificationsResponse = await response.json();
-      const notifications = convertServerNotificationsToClient(data.data);
+      const json: NotificationsResponse = await response.json();
+      const notifications = convertServerNotificationsToClient(json.data);
       return { notifications, total: notifications.length };
     }
     console.warn(`API Error: ${response.status} ${response.statusText}`);
-    return {
-      notifications: [],
-      total: 0,
-    };
+    return data(
+      { notifications: [] as Notification[], total: 0 },
+      { status: response.status },
+    );
   } catch (error) {
     console.warn("Failed to fetch notifications from server:", error);
-    return {
-      notifications: [],
-      total: 0,
-    };
+    return data(
+      { notifications: [] as Notification[], total: 0 },
+      { status: 503 },
+    );
   }
 }
 
