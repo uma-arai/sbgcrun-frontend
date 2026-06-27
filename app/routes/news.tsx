@@ -10,6 +10,7 @@ import {
   Tag,
   User,
 } from "lucide-react";
+import { data } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -68,18 +69,24 @@ export async function loader() {
       return { news, total: news.length, error: null as string | null };
     }
     console.warn(`API Error: ${response.status} ${response.statusText}`);
-    return {
-      news: [],
-      total: 0,
-      error: `取得に失敗しました`,
-    };
+    return data(
+      {
+        news: [] as News[],
+        total: 0,
+        error: "取得に失敗しました" as string | null,
+      },
+      { status: response.status },
+    );
   } catch (error) {
     console.warn("Failed to fetch news from server:", error);
-    return {
-      news: [],
-      total: 0,
-      error: "データの取得に失敗しました",
-    };
+    return data(
+      {
+        news: [] as News[],
+        total: 0,
+        error: "データの取得に失敗しました" as string | null,
+      },
+      { status: 503 },
+    );
   }
 }
 
