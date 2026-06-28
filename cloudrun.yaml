@@ -23,7 +23,7 @@ spec:
         # run.googleapis.com/network-interfaces: '[{"network":"sbgcrun-app", "subnetwork":"sbgcrun-app"}]'
         # run.googleapis.com/vpc-access-egress: all-traffic
     spec:
-      containerConcurrency: 10
+      containerConcurrency: 40
       timeoutSeconds: 300
       serviceAccountName: sbgcrun-app-frontend@PROJECT_ID.iam.gserviceaccount.com
       containers:
