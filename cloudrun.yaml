@@ -6,7 +6,7 @@ metadata:
     # 4章Step3でコメントアウト予定
     run.googleapis.com/ingress: all
     run.googleapis.com/invoker-iam-disabled: "true"
-    run.googleapis.com/maxScale: "2"
+    run.googleapis.com/maxScale: "10"
     # 4章Step3でコメントを外す。外部からはロードバランサ経由のみを許可する
     # run.googleapis.com/ingress: internal-and-cloud-load-balancing
     # 5章Step1でコメントを外す。デフォルトURLを無効化する
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       annotations:
-        autoscaling.knative.dev/maxScale: '2'
+        autoscaling.knative.dev/maxScale: '10'
         run.googleapis.com/execution-environment: gen2
         # 4章Step4でコメントを外す。VPCネットワークの設定
         # run.googleapis.com/network-interfaces: '[{"network":"sbgcrun-app", "subnetwork":"sbgcrun-app"}]'
