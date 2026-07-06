@@ -25,13 +25,10 @@ import {
 import type { Pet } from "~/types/pet";
 
 // 共通化されたFormInputコンポーネント（refフォワーディング対応）
-interface FormInputProps extends Omit<
-  ComponentProps<typeof Input>,
-  "disabled"
-> {
+type FormInputProps = Omit<ComponentProps<typeof Input>, "disabled"> & {
   hasError?: boolean;
   isFormSubmitting?: boolean;
-}
+};
 
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ({ hasError, isFormSubmitting, className = "", ...props }, ref) => {

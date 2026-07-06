@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    "no-unused-expressions": "off",
+    "prefer-template": "warn",
+    "radix": "warn",
+    "typescript/no-explicit-any": "warn",
+    "unicorn/prefer-number-properties": "warn"
+  }
+}
