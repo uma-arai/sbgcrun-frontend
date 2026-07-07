@@ -34,8 +34,8 @@ export const reservationFormSchema = z.object({
     .string()
     .min(1, "氏名は必須です")
     .trim()
-    .refine(val => val.length > 0, {
-      message: "氏名を入力してください"
+    .refine((val) => val.length > 0, {
+      message: "氏名を入力してください",
     }),
 
   email: z
@@ -47,15 +47,15 @@ export const reservationFormSchema = z.object({
   date: z
     .string()
     .min(1, "見学予定日時は必須です")
-    .refine(val => /^\d{8}$/.test(val), {
-      message: "日時の形式が正しくありません。20260101のように入力してください"
+    .refine((val) => /^\d{8}$/.test(val), {
+      message: "日時の形式が正しくありません。20260101のように入力してください",
     })
-    .refine(val => isValidDate(val), {
-      message: "存在しない日付です"
+    .refine((val) => isValidDate(val), {
+      message: "存在しない日付です",
     })
-    .refine(val => val >= getCurrentDateYYYYMMDD(), {
-      message: "過去の日時は選択できません"
-    })
+    .refine((val) => val >= getCurrentDateYYYYMMDD(), {
+      message: "過去の日時は選択できません",
+    }),
 });
 
 // TypeScript型の自動生成
@@ -69,9 +69,9 @@ export const getDefaultValues = (): ReservationFormData => ({
     .toLocaleDateString("ja-JP", {
       year: "numeric",
       month: "2-digit",
-      day: "2-digit"
+      day: "2-digit",
     })
-    .replaceAll("/", "")
+    .replaceAll("/", ""),
 });
 
 // フォーム送信用のデータ型（サーバーに送信する際の形式）
@@ -79,7 +79,7 @@ export const reservationSubmissionSchema = z.object({
   userId: z.string(),
   fullName: z.string(),
   email: z.string().email(),
-  reservationDate: z.string()
+  reservationDate: z.string(),
 });
 
 export type ReservationSubmissionData = z.infer<
@@ -89,10 +89,10 @@ export type ReservationSubmissionData = z.infer<
 // フォームデータを送信用データに変換する関数
 export const transformToSubmissionData = (
   formData: ReservationFormData,
-  userId: string
+  userId: string,
 ): ReservationSubmissionData => ({
   userId,
   fullName: formData.name,
   email: formData.email,
-  reservationDate: formData.date
+  reservationDate: formData.date,
 });
