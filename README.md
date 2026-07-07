@@ -48,7 +48,7 @@ React Router v7を使用した、モダンなペットショップ風のWebア�
 ### ビルド・開発ツール
 
 - **[Vite](https://vitejs.dev/)**
-- **[Biome](https://biomejs.dev/)**
+- **[oxlint](https://oxc.rs/docs/guide/usage/linter)** / **[oxfmt](https://oxc.rs/docs/guide/usage/formatter)**
 - **[pnpm](https://pnpm.io/)**
 
 ## システム要件

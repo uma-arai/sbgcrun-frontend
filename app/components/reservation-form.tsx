@@ -10,7 +10,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -20,18 +20,15 @@ import {
   getDefaultValues,
   type ReservationFormData,
   reservationFormSchema,
-  transformToSubmissionData
+  transformToSubmissionData,
 } from "~/schemas/reservation";
 import type { Pet } from "~/types/pet";
 
 // 共通化されたFormInputコンポーネント（refフォワーディング対応）
-interface FormInputProps extends Omit<
-  ComponentProps<typeof Input>,
-  "disabled"
-> {
+type FormInputProps = Omit<ComponentProps<typeof Input>, "disabled"> & {
   hasError?: boolean;
   isFormSubmitting?: boolean;
-}
+};
 
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
   ({ hasError, isFormSubmitting, className = "", ...props }, ref) => {
@@ -50,7 +47,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         {...props}
       />
     );
-  }
+  },
 );
 
 FormInput.displayName = "FormInput";
@@ -64,7 +61,7 @@ interface ReservationFormModalProps {
 export function ReservationFormModal({
   pet,
   isOpen,
-  onClose
+  onClose,
 }: ReservationFormModalProps) {
   const { userId } = useUser();
   const fetcher = useFetcher();
@@ -77,11 +74,11 @@ export function ReservationFormModal({
     reset,
     watch,
     clearErrors,
-    setFocus
+    setFocus,
   } = useForm<ReservationFormData>({
     resolver: zodResolver(reservationFormSchema),
     defaultValues: getDefaultValues(),
-    mode: "onChange"
+    mode: "onChange",
   });
 
   useEffect(() => {
@@ -107,14 +104,14 @@ export function ReservationFormModal({
 
         await fetcher.submit(submissionData, {
           method: "post",
-          action: `/pets/${pet.id}/reservation`
+          action: `/pets/${pet.id}/reservation`,
         });
 
         toast({
           variant: "success",
           title: "🎉 予約が完了しました",
           description: `${pet.name}の見学予約を承りました。当日お待ちしております！`,
-          duration: 5000
+          duration: 5000,
         });
         reset();
         onClose();
@@ -126,11 +123,11 @@ export function ReservationFormModal({
           title: "❌ 予約に失敗しました",
           description:
             "ネットワークエラーまたはサーバーエラーが発生しました。もう一度お試しください。",
-          duration: 5000
+          duration: 5000,
         });
       }
     },
-    [userId, fetcher, pet.id, pet.name, reset, onClose, toast]
+    [userId, fetcher, pet.id, pet.name, reset, onClose, toast],
   );
 
   const handleClose = useCallback(() => {
@@ -155,7 +152,7 @@ export function ReservationFormModal({
       if (isTouched && hasValue && !hasError) return "success";
       return "default";
     },
-    [errors, touchedFields, watchedValues]
+    [errors, touchedFields, watchedValues],
   );
 
   // フィールドのアイコンを取得
@@ -171,7 +168,7 @@ export function ReservationFormModal({
           return null;
       }
     },
-    [getFieldStatus]
+    [getFieldStatus],
   );
 
   // 日付フィールド用のフォーマットヘルパー
@@ -194,7 +191,7 @@ export function ReservationFormModal({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
         className="sm:max-w-[500px] md:max-w-[600px] lg:max-w-[700px]"
-        onInteractOutside={e => {
+        onInteractOutside={(e) => {
           // Note: 画面外クリックで閉じないようにする
           e.preventDefault();
         }}
@@ -295,7 +292,7 @@ export function ReservationFormModal({
                 <FormInput
                   id="date"
                   {...register("date", {
-                    setValueAs: formatDateInput
+                    setValueAs: formatDateInput,
                   })}
                   hasError={!!errors.date}
                   isFormSubmitting={isFormSubmitting}

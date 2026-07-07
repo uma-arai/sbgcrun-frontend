@@ -8,7 +8,9 @@
     "dev": "react-router dev",
     "start": "PORT=8080 react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc --build --noEmit",
-    "lint": "pnpm biome lint --write ./app",
+    "lint": "oxlint ./app",
+    "format": "oxfmt ./app",
+    "format:check": "oxfmt --check ./app",
     "check-node": "node -v"
   },
   "dependencies": {
@@ -41,12 +43,13 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.14",
     "@react-router/dev": "^7.14.2",
     "@tailwindcss/vite": "^4.2.4",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "oxfmt": "^0.57.0",
+    "oxlint": "^1.72.0",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
     "vite": "^8.0.10"
