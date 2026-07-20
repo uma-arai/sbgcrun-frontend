@@ -1,6 +1,5 @@
 options:
   logging: CLOUD_LOGGING_ONLY
-  machineType: E2_MEDIUM
   env:
     - "DEPLOY_ENV=$_DEPLOY_ENV"
     - "SKAFFOLD_DEFAULT_REPO=asia-northeast1-docker.pkg.dev/$PROJECT_ID/sbgcrun-app"
@@ -39,10 +38,6 @@ steps:
         cat artifacts.json
 
 #  # Chap6ハンズオンのみ使用。Binary Authorizationの証明書を作成するステップ
-#  # 有効化する場合は下記に加えて次の対応が必要:
-#  #   - GCPプロジェクト側で sbgcrun-attestor / sbgcrun-keyring / sbgcrun-attestor-key を作成済みであること
-#  #   - cloudrun.yaml の run.googleapis.com/binary-authorization アノテーションを有効化すること
-#  #   - deploy ステップの waitFor に create-attestation を追加すること
 #  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
 #    id: create-attestation
 #    waitFor:
