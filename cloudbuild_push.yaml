@@ -1,5 +1,6 @@
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: E2_MEDIUM
   env:
     - "DEPLOY_ENV=$_DEPLOY_ENV"
     - "SKAFFOLD_DEFAULT_REPO=asia-northeast1-docker.pkg.dev/$PROJECT_ID/sbgcrun-app"
@@ -23,9 +24,16 @@ steps:
           --cache-to   "type=registry,ref=$${IMAGE}:buildcache,mode=max" \
           -t "$${IMAGE}:$${TAG}" \
           --push \
+          --metadata-file metadata.json \
           .
 
-        DIGEST=$(docker buildx imagetools inspect "$${IMAGE}:$${TAG}" --format '{{.Manifest.Digest}}')
+        DIGEST=$(sed -n 's/.*"containerimage\.digest": *"\(sha256:[a-f0-9]*\)".*/\1/p' metadata.json | head -n1)
+        if [ -z "$${DIGEST}" ]; then
+          echo "failed to extract image digest from buildx metadata" >&2
+          cat metadata.json >&2
+          exit 1
+        fi
+
         printf '{"builds":[{"imageName":"frontend","tag":"%s:%s@%s"}]}' \
           "$${IMAGE}" "$${TAG}" "$${DIGEST}" > artifacts.json
         cat artifacts.json
