@@ -27,33 +27,9 @@ React Router v7を使用した、モダンなペットショップ風のWebア�
 - **ショッピングカート**: localStorageを使用したカート機能（UUID管理）
 - **レスポンシブデザイン**: モバイル・デスクトップ対応
 
-## 技術スタック
-
-### フレームワーク・ライブラリ
-
-- **[React Router v7](https://reactrouter.com/)**
-- **[React](https://react.dev/)**
-- **[TypeScript](https://www.typescriptlang.org/)**
-
-### UI・スタイリング
-
-- **[Tailwind CSS](https://tailwindcss.com/)**
-- **[shadcn/ui](https://ui.shadcn.com/)**
-
-### フォーム・バリデーション
-
-- **[React Hook Form](https://react-hook-form.com/)**
-- **[Zod](https://zod.dev/)**
-
-### ビルド・開発ツール
-
-- **[Vite](https://vitejs.dev/)**
-- **[oxlint](https://oxc.rs/docs/guide/usage/linter)** / **[oxfmt](https://oxc.rs/docs/guide/usage/formatter)**
-- **[pnpm](https://pnpm.io/)**
-
 ## システム要件
 
-- Node.js >= 25.0.0
+- Node.js >= 24.0.0
 - pnpm >= 10.33.2
 
 ## セットアップ
@@ -150,9 +126,10 @@ react-router.config.ts  # React Router v7設定
 ## 注意事項
 
 - このアプリケーションは書籍のサンプルコードです。
-- Mac OS Sequoia 15.6での動作確認済み。
+- Mac OS Tahoe 26.5.2での動作確認済み。
 - 本番環境での利用は想定していません。
 
 ## 関連リポジトリ
 
 - [sbgcrun-backend](https://github.com/uma-arai/sbgcrun-backend)
+- [sbgcrun-batch](https://github.com/uma-arai/sbgcrun-batch)
