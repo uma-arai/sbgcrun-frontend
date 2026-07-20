@@ -39,6 +39,10 @@ steps:
         cat artifacts.json
 
 #  # Chap6ハンズオンのみ使用。Binary Authorizationの証明書を作成するステップ
+#  # 有効化する場合は下記に加えて次の対応が必要:
+#  #   - GCPプロジェクト側で sbgcrun-attestor / sbgcrun-keyring / sbgcrun-attestor-key を作成済みであること
+#  #   - cloudrun.yaml の run.googleapis.com/binary-authorization アノテーションを有効化すること
+#  #   - deploy ステップの waitFor に create-attestation を追加すること
 #  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
 #    id: create-attestation
 #    waitFor:
@@ -48,18 +52,17 @@ steps:
 #      - "-c"
 #      - |-
 #        apt-get update && apt-get install -y jq
-#        cd app/${_SERVICE_NAME}/
 #        _IMAGE_DIGEST=$(cat artifacts.json | jq -r .builds[0].tag | cut -f 2 -d "@")
 #        echo "IMAGE_DIGEST: $$_IMAGE_DIGEST"
 #        gcloud beta container binauthz attestations sign-and-create \
 #          --project=$PROJECT_ID \
 #          --artifact-url=$${SKAFFOLD_DEFAULT_REPO}/frontend@$${_IMAGE_DIGEST} \
-#          --attestor=cnsrun-attestor \
+#          --attestor=sbgcrun-attestor \
 #          --attestor-project=$PROJECT_ID \
 #          --keyversion-project=$PROJECT_ID \
 #          --keyversion-location=$_REGION \
-#          --keyversion-keyring=cnsrun-keyring \
-#          --keyversion-key=cnsrun-attestor-key \
+#          --keyversion-keyring=sbgcrun-keyring \
+#          --keyversion-key=sbgcrun-attestor-key \
 #          --keyversion=1
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
