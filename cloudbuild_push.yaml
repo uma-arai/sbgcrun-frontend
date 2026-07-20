@@ -23,9 +23,16 @@ steps:
           --cache-to   "type=registry,ref=$${IMAGE}:buildcache,mode=max" \
           -t "$${IMAGE}:$${TAG}" \
           --push \
+          --metadata-file metadata.json \
           .
 
-        DIGEST=$(docker buildx imagetools inspect "$${IMAGE}:$${TAG}" --format '{{.Manifest.Digest}}')
+        DIGEST=$(sed -n 's/.*"containerimage\.digest": *"\(sha256:[a-f0-9]*\)".*/\1/p' metadata.json | head -n1)
+        if [ -z "$${DIGEST}" ]; then
+          echo "failed to extract image digest from buildx metadata" >&2
+          cat metadata.json >&2
+          exit 1
+        fi
+
         printf '{"builds":[{"imageName":"frontend","tag":"%s:%s@%s"}]}' \
           "$${IMAGE}" "$${TAG}" "$${DIGEST}" > artifacts.json
         cat artifacts.json
@@ -40,18 +47,17 @@ steps:
 #      - "-c"
 #      - |-
 #        apt-get update && apt-get install -y jq
-#        cd app/${_SERVICE_NAME}/
 #        _IMAGE_DIGEST=$(cat artifacts.json | jq -r .builds[0].tag | cut -f 2 -d "@")
 #        echo "IMAGE_DIGEST: $$_IMAGE_DIGEST"
 #        gcloud beta container binauthz attestations sign-and-create \
 #          --project=$PROJECT_ID \
 #          --artifact-url=$${SKAFFOLD_DEFAULT_REPO}/frontend@$${_IMAGE_DIGEST} \
-#          --attestor=cnsrun-attestor \
+#          --attestor=sbgcrun-attestor \
 #          --attestor-project=$PROJECT_ID \
 #          --keyversion-project=$PROJECT_ID \
 #          --keyversion-location=$_REGION \
-#          --keyversion-keyring=cnsrun-keyring \
-#          --keyversion-key=cnsrun-attestor-key \
+#          --keyversion-keyring=sbgcrun-keyring \
+#          --keyversion-key=sbgcrun-attestor-key \
 #          --keyversion=1
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
