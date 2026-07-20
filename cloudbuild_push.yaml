@@ -24,10 +24,18 @@ steps:
           --cache-to   "type=registry,ref=$${IMAGE}:buildcache,mode=max" \
           -t "$${IMAGE}:$${TAG}" \
           --push \
+          --metadata-file metadata.json \
           .
 
-        printf '{"builds":[{"imageName":"frontend","tag":"%s:%s"}]}' \
-          "$${IMAGE}" "$${TAG}" > artifacts.json
+        DIGEST=$(sed -n 's/.*"containerimage\.digest": *"\(sha256:[a-f0-9]*\)".*/\1/p' metadata.json | head -n1)
+        if [ -z "$${DIGEST}" ]; then
+          echo "failed to extract image digest from buildx metadata" >&2
+          cat metadata.json >&2
+          exit 1
+        fi
+
+        printf '{"builds":[{"imageName":"frontend","tag":"%s:%s@%s"}]}' \
+          "$${IMAGE}" "$${TAG}" "$${DIGEST}" > artifacts.json
         cat artifacts.json
 
 #  # Chap6ハンズオンのみ使用。Binary Authorizationの証明書を作成するステップ
