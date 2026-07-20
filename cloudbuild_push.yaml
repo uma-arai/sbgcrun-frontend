@@ -5,14 +5,30 @@ options:
     - "SKAFFOLD_DEFAULT_REPO=asia-northeast1-docker.pkg.dev/$PROJECT_ID/sbgcrun-app"
 
 steps:
-  - name: "gcr.io/k8s-skaffold/skaffold:v2.10.1"
+  # buildx + registry cache でビルド。skaffold build 相当の artifacts.json を自前生成し、
+  # 後続の Cloud Deploy ステップ（--build-artifacts）へそのまま渡す
+  - name: "gcr.io/cloud-builders/docker"
     id: "build"
     entrypoint: "bash"
     args:
       - "-c"
       - |-
-        git config --global core.abbrev 8
-        skaffold build --file-output=artifacts.json --filename=skaffold.yaml
+        set -euo pipefail
+        TAG=$(git rev-parse --short=8 HEAD)
+        IMAGE="$${SKAFFOLD_DEFAULT_REPO}/frontend"
+
+        docker buildx create --name ci --driver docker-container --use
+        docker buildx build \
+          --cache-from "type=registry,ref=$${IMAGE}:buildcache" \
+          --cache-to   "type=registry,ref=$${IMAGE}:buildcache,mode=max" \
+          -t "$${IMAGE}:$${TAG}" \
+          --push \
+          .
+
+        DIGEST=$(docker buildx imagetools inspect "$${IMAGE}:$${TAG}" --format '{{.Manifest.Digest}}')
+        printf '{"builds":[{"imageName":"frontend","tag":"%s:%s@%s"}]}' \
+          "$${IMAGE}" "$${TAG}" "$${DIGEST}" > artifacts.json
+        cat artifacts.json
 
 #  # Chap6ハンズオンのみ使用。Binary Authorizationの証明書を作成するステップ
 #  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
