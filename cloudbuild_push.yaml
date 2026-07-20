@@ -1,5 +1,6 @@
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: E2_MEDIUM
   env:
     - "DEPLOY_ENV=$_DEPLOY_ENV"
     - "SKAFFOLD_DEFAULT_REPO=asia-northeast1-docker.pkg.dev/$PROJECT_ID/sbgcrun-app"
