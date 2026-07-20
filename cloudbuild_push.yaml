@@ -26,9 +26,8 @@ steps:
           --push \
           .
 
-        DIGEST=$(docker buildx imagetools inspect "$${IMAGE}:$${TAG}" --format '{{.Manifest.Digest}}')
-        printf '{"builds":[{"imageName":"frontend","tag":"%s:%s@%s"}]}' \
-          "$${IMAGE}" "$${TAG}" "$${DIGEST}" > artifacts.json
+        printf '{"builds":[{"imageName":"frontend","tag":"%s:%s"}]}' \
+          "$${IMAGE}" "$${TAG}" > artifacts.json
         cat artifacts.json
 
 #  # Chap6ハンズオンのみ使用。Binary Authorizationの証明書を作成するステップ
