@@ -3,15 +3,15 @@ kind: Service
 metadata:
   name: sbgcrun-frontend
   annotations:
-    # 4章Step3でコメントアウト予定
+    # 5章Step3でコメントアウト予定
     run.googleapis.com/ingress: all
     run.googleapis.com/invoker-iam-disabled: "true"
     run.googleapis.com/maxScale: "10"
-    # 4章Step3でコメントを外す。外部からはロードバランサ経由のみを許可する
+    # 5章Step3でコメントを外す。外部からはロードバランサ経由のみを許可する
     # run.googleapis.com/ingress: internal-and-cloud-load-balancing
-    # 5章Step1でコメントを外す。デフォルトURLを無効化する
+    # 6章Step1でコメントを外す。デフォルトURLを無効化する
     # run.googleapis.com/default-url-disabled: "true"
-    # 5章Step9でコメントを外す。BinaryAuthの有効化
+    # 6章Step9でコメントを外す。BinaryAuthの有効化
     # run.googleapis.com/binary-authorization: default
 spec:
   template:
@@ -19,7 +19,7 @@ spec:
       annotations:
         autoscaling.knative.dev/maxScale: '10'
         run.googleapis.com/execution-environment: gen2
-        # 4章Step4でコメントを外す。VPCネットワークの設定
+        # 5章Step4でコメントを外す。VPCネットワークの設定
         # run.googleapis.com/network-interfaces: '[{"network":"sbgcrun-app", "subnetwork":"sbgcrun-app"}]'
         # run.googleapis.com/vpc-access-egress: all-traffic
     spec:
